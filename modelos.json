@@ -43,6 +43,7 @@
     "Citas": [
       {
         "codCita": "e123",
+        "futura": true,
         "tipo": "Medicina General",
         "motivoConsulta": "Melestar general",
         "asistencia": false,
@@ -58,6 +59,8 @@
     "codAgenda": "qwe",
     "estado": "disponible",
     "fechaHora": "2022-09-17T04:20:50.000+00:00",
+    "modalidad": "",
+    "lugar": "",
     "idProfesional": 13234
   },
   "Administrativos": {

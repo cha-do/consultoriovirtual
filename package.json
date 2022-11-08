@@ -1,0 +1,23 @@
+{
+  "name": "consultoriovirtual",
+  "version": "1.0.0",
+  "description": "MisionTIC proyecto ciclo 4",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cha-do/consultoriovirtual.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mongoDB"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cha-do/consultoriovirtual/issues"
+  },
+  "homepage": "https://github.com/cha-do/consultoriovirtual#readme"
+}
