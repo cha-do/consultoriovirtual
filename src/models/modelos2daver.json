@@ -1,0 +1,52 @@
+{
+  "Profesional": {
+    "idProfesional": 13234,
+    "password": "cedce",
+    "estado": "cedce",
+    "nombres": "cedce",
+    "apellidos": "edce",
+    "sexo": "cedcec",
+    "especialidad": "cedce",
+    "mailDir": "cecdvce",
+    "residenciaDir": "cedcedc",
+    "personalTel": 1234756,
+    "fechaNacimiento": "2022-09-05",
+  },
+  "Paciente": {
+    "idPaciente": 1,
+    "password": "dwedwe",
+    "estado": "dwewe",
+    "nombres": "dwedw",
+    "apellidos": "dwed",
+    "eps": "dwedw",
+    "ocupacion": "dwedwe",
+    "mailDir": "wedwed",
+    "residenciaDir": "csdc",
+    "personalTel": 1345,
+    "fechaNacimiento": "2022-09-05",
+    "antecedentesFamiliares": "dwed",
+    "antecedentesPersonales": "dwedw",
+    "alergias": "dwd"
+  },
+  "Agenda": {
+    "codAgenda": "qwe",
+    "estado": "disponible",
+    "fechaHora": "2022-09-17T04:20:50.000+00:00",
+    "modalidad": "",
+    "lugar": "",
+    "idProfesional": 13234
+  },
+  "Citas":{
+      "codCita": "e123",
+      "futura": true,
+      "tipo": "Medicina General",
+      "motivoConsulta": "Melestar general",
+      "asistencia": false,
+      "hallazgosPotitivos": "",
+      "impresionesDiag": "",
+      "remision": "",
+      "codAgenda": "qwe",
+      "idProfesional": 13234,
+      "idPaciente": ""
+  }
+}
