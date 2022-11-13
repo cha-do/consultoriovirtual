@@ -28,7 +28,7 @@
     "antecedentesFamiliares": "dwed",
     "antecedentesPersonales": "dwedw",
     "alergias": "dwd",
-    "Tratamientos farmacológicos": [
+    "tratFarmacológicos": [
       {
         "codTratFarmacologico": "e1",
         "dosis": "mucha",
@@ -40,7 +40,7 @@
         "idProfesional": 13234
       }
     ],
-    "Citas": [
+    "citas": [
       {
         "codCita": "e123",
         "futura": true,
