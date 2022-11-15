@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 
  function authPaciente (req, res, next) {
   //leer el token del header
+  console.log("verificando tken en el requets")
   const token = req.header("x-auth-token");
 
   //revisar si no hay token

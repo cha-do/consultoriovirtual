@@ -1,4 +1,4 @@
-const Paciente = require("../models/Paciente");
+const Paciente = require("../models/paciente");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");

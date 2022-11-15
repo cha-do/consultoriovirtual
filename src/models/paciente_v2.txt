@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+/*var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PacienteSchema = Schema({
@@ -47,5 +47,5 @@ var PacienteSchema = Schema({
 
 const Paciente = mongoose.model('Paciente', PacienteSchema);
 module.exports = Paciente;
-
+*/
 //db.usuarios.updateOne({"id":"ss"},{"$":{"tratFarmacológicos.cantidadTotal":12,}}) operaciones de mongodb

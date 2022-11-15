@@ -5,19 +5,18 @@ const {
   findPaciente,
   allPacientes,
   updatePaciente,
-  deletePaciente,
-  findCitas
+  deletePaciente
 } = require("../controllers/paciente");
 
 router = Router();
 
-router.get('/prueba', prueba);
+router.get('/prueba',  prueba);
 router.post('/', savePaciente);
 router.get('/:id', findPaciente);
 router.get('/', allPacientes);
 router.put('/:id', updatePaciente);
 router.delete('/:id', deletePaciente);
-router.get('/:id/:idCita', findCitas);
+//router.get('/:id/:idCita', findCitas);
 
 
 module.exports = router;

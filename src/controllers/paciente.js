@@ -3,7 +3,16 @@ const bcryptjs = require("bcryptjs");
 const Paciente = require("../models/paciente");
 //const Profesional = require("../models/profesional");
 const { validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
+//const jwt = require("jsonwebtoken");
+
+function validateKeyDuplicate(error) {
+  var myRegexp = new RegExp(
+    'E11000 duplicate key error collection: consultoriovirtual2.pacientes index: [a-zA-Z0-9_]* dup key: { ([a-zA-Z0-9_]*): [a-zA-Z0-9.&%$@_"]* }',
+    "g"
+  );
+  var match = myRegexp.exec(error);
+  return match;
+}
 
 function prueba(req, res) {
   res.status(200).send({
@@ -29,42 +38,57 @@ const savePaciente = async (req, res) => {
     return res.status(400).json({ errores: errores.array() });
   }
 
-  const { _id, email, password } = req.body;
+  const { email, password } = req.body;
 
-  try {
-    //Revisar que el usuario registrado sea único
-    let pacientex = await Paciente.findOne({ email });
+  //Revisar que el usuario registrado sea único
+
+  /*let pacientex = await Paciente.findOne({ _id });
+  if (pacientex) {
+    return res.status(400).json({
+      menssage: `Ya existe un usuario con ese número de intificación`,
+    });
+  }
+
+  if (email) {
+    pacientex = await Paciente.findOne({ email });
     if (pacientex) {
-      return res
-        .status(400)
-        .json({
-          menssage: `Ya existe un usuario con el email ${email}, debe usar un emal no registrado`,
-        });
+      return res.status(400).json({
+        menssage: `Ya existe un usuario con el email ${email}, debe usar un emal no registrado`,
+      });
     }
+  }*/
 
-    pacientex = await Paciente.findOne({ _id });
-    if (pacientex) {
-      return res
-        .status(400)
-        .json({
-          menssage: `Ya existe un usuario con ese número de intificación.`,
+  //crear el nuevo paciente
+  let paciente = new Paciente(req.body);
+  paciente.password = await bcryptjs.hash(password, 10);
+
+  //Guardar usuario en la bd
+  const error = await paciente.save().catch((error) => error.message);
+  if (typeof error == "string") {
+    let key = validateKeyDuplicate(error);
+    console.log(error);
+    console.log(key);
+    if (key != null) {
+      if (key[1] == "email") {
+        return res.status(400).json({
+          msg: `Ya existe un usuario con el email ${email}, debe usar un email no registrado`,
         });
+      }
+      if (key[1] == "_id") {
+        return res.status(400).json({
+          msg: `Ya existe un usuario con ese número de identificación`,
+        });
+      }
     }
+    return res.status(400).json({ message: error });
+  }
+  //Firmar el JWT
+  const payload = {
+    _id: paciente._id,
+  };
+  return res.status(200).json(payload);
 
-    //crear el nuevo paciente
-    let paciente = new Usuario(req.body);
-
-    paciente.password = bcryptjs.hash(password, 10);
-
-    //Guardar usuario en la bd
-    await paciente.save();
-
-    //Firmar el JWT
-    const payload = {
-      paciente: { _id: paciente._id },
-    };
-
-    jwt.sign(
+  /*jwt.sign(
       payload,
       process.env.SECRETA,
       {
@@ -76,12 +100,7 @@ const savePaciente = async (req, res) => {
         //Mensaje de confirmación
         res.json({ token });
       }
-    );
-  } catch (error) {
-    console.log("Hubo un error");
-    console.log(error);
-    res.status(400).send("Hubo un error");
-  }
+    );*/
 };
 
 function findPaciente(req, res) {
@@ -105,7 +124,8 @@ function findPaciente(req, res) {
 function allPacientes(req, res) {
   //var idCarrera=req.params.id;//porque idb?
   //console.log(idCarrera);
-  var result = Paciente.find({});
+  var result = Paciente.find({}).sort("_id");
+
   result.exec(function (err, result) {
     if (err) {
       res
@@ -145,6 +165,8 @@ function allPacientes(req, res) {
 const updatePaciente = async (req, res) => {
   const { estado, password, nombres, apellidos, eps, email, personalTel } =
     req.body;
+
+  //console.log(req.body, estado);
   try {
     //validar si el id del la entidad relacionada existe.
     /*const proyectoEncontrado = await Proyecto.findById(proyecto);
@@ -157,28 +179,33 @@ const updatePaciente = async (req, res) => {
       return res.status(400).json({ msg: "No autorizado" });
     }*/
 
-    const pacienteExiste = await Tarea.findById(req.params.id);
+    const pacienteExiste = await Paciente.findById(req.params.id);
     if (!pacienteExiste) {
-      return res
-        .status(404)
-        .json({
-          msg: "No existe paciente registrado con ese número de identificación.",
-        });
+      return res.status(404).json({
+        msg: "No existe paciente registrado con ese número de identificación.",
+      });
     }
-
-    const pacienteCorreo = await Proyecto.findOne({ email });
-    if (pacienteCorreo._id.toString() != pacienteExiste._id.toString() ) {
-      return res.status(400).json({ msg: "Existe un usuario con ese email." });
+    if (email) {
+      const pacienteCorreo = await Paciente.findOne({ email });
+      //console.log(pacienteCorreo)
+      if (pacienteCorreo!=null) {
+        if (pacienteCorreo._id.toString() != pacienteExiste._id.toString()) {
+          return res
+            .status(400)
+            .json({ msg: "Existe un usuario con ese email." });
+        }
+      }
     }
 
     const newPaciente = {};
-    nombres ? (newPaciente.nombres = nombres) : _;
-
-    if (estado) {
+    if (nombres) {
+      newPaciente.nombres = nombres;
+    }
+    if (estado != null) {
       newPaciente.estado = estado;
     }
     if (password) {
-      newPaciente.password = bcryptjs.hash(password, 10);
+      newPaciente.password = await bcryptjs.hash(password, 10);
     }
     if (apellidos) {
       newPaciente.apellidos = apellidos;
@@ -192,6 +219,8 @@ const updatePaciente = async (req, res) => {
     if (personalTel) {
       newPaciente.personalTel = personalTel;
     }
+
+    console.log(newPaciente);
 
     var paciente = await Paciente.findOneAndUpdate(
       { _id: req.params.id },
@@ -285,5 +314,5 @@ module.exports = {
   findPaciente,
   allPacientes,
   updatePaciente,
-  deletePaciente
+  deletePaciente,
 };
