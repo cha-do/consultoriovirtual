@@ -1,16 +1,16 @@
-//Rutas para autenticar paciente
-const express = require("express");
-const router = express.Router();
+const { Router } = require("express");
 const { check } = require("express-validator");
 const authController = require("../controllers/authController");
 const auth = require("../middleware/auth");
+
+router = Router();
 
 // Autentica un paciente
 // api/auth
 router.post(
   "/",
   [
-    check("_id", "Agrega número de identificaicón válido").isInt(),
+    check("_id", "Número de identificaicón inválido").isInt(),
     check("password", "El password debe ser mínimo de 6 caracteres").isLength({
       min: 6,
     }),

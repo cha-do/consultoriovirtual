@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const Paciente = require("../models/paciente");
 //const Profesional = require("../models/profesional");
 const { validationResult } = require("express-validator");
-//const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 function validateKeyDuplicate(error) {
   var myRegexp = new RegExp(
@@ -84,23 +84,25 @@ const savePaciente = async (req, res) => {
   }
   //Firmar el JWT
   const payload = {
-    _id: paciente._id,
+    paciente: { _id: paciente._id },
   };
-  return res.status(200).json(payload);
 
-  /*jwt.sign(
-      payload,
-      process.env.SECRETA,
-      {
-        expiresIn: 3600, //1 hora
-      },
-      (error, token) => {
-        if (error) throw error;
+  jwt.sign(
+    payload,
+    process.env.SECRETA,
+    {
+      expiresIn: 3600, //1 hora
+    },
+    (error, token) => {
+      if (error) throw error;
 
-        //Mensaje de confirmación
-        res.json({ token });
-      }
-    );*/
+      //Mensaje de confirmación
+      res.json({
+        token,
+        payload
+      });
+    }
+  );
 };
 
 function findPaciente(req, res) {
@@ -166,7 +168,7 @@ const updatePaciente = async (req, res) => {
   const { estado, password, nombres, apellidos, eps, email, personalTel } =
     req.body;
 
-  //console.log(req.body, estado);
+  console.log(req.body, estado);
   try {
     //validar si el id del la entidad relacionada existe.
     /*const proyectoEncontrado = await Proyecto.findById(proyecto);
@@ -188,7 +190,7 @@ const updatePaciente = async (req, res) => {
     if (email) {
       const pacienteCorreo = await Paciente.findOne({ email });
       //console.log(pacienteCorreo)
-      if (pacienteCorreo!=null) {
+      if (pacienteCorreo != null) {
         if (pacienteCorreo._id.toString() != pacienteExiste._id.toString()) {
           return res
             .status(400)

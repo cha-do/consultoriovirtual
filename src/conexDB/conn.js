@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require("dotenv").config({ path: "variables.env" });
 
 mongoose
     .connect("mongodb://0.0.0.0:27017/consultoriovirtual2",
