@@ -15,8 +15,8 @@ router.get("/prueba", prueba);
 router.post(
   "/",
   [
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    oneOf([check('username').isEmpty(), check('email').isEmail()], "Agrega un email válido"),
+    check("nombres", "El nombre es obligatorio").not().isEmpty(),
+    oneOf([check('email').isEmpty(), check('email').isEmail()], "Agrega un email válido"),
     check("password", "El password debe ser mínimo de 6 caracteres").isLength({
       min: 6,
     }),

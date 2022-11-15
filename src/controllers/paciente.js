@@ -20,17 +20,6 @@ function prueba(req, res) {
   });
 }
 
-/*function savePaciente(req, res) {
-  const newPaciente = new Paciente(req.body);
-  newPaciente.save((err, result) => {
-    if (err) {
-      throw err;
-    } else {
-      res.status(200).send({ message: result });
-    }
-  });
-}*/
-
 const savePaciente = async (req, res) => {
   //revisar si hay errores
   const errores = validationResult(req);
@@ -40,24 +29,6 @@ const savePaciente = async (req, res) => {
 
   const { email, password } = req.body;
 
-  //Revisar que el usuario registrado sea único
-
-  /*let pacientex = await Paciente.findOne({ _id });
-  if (pacientex) {
-    return res.status(400).json({
-      menssage: `Ya existe un usuario con ese número de intificación`,
-    });
-  }
-
-  if (email) {
-    pacientex = await Paciente.findOne({ email });
-    if (pacientex) {
-      return res.status(400).json({
-        menssage: `Ya existe un usuario con el email ${email}, debe usar un emal no registrado`,
-      });
-    }
-  }*/
-
   //crear el nuevo paciente
   let paciente = new Paciente(req.body);
   paciente.password = await bcryptjs.hash(password, 10);
@@ -66,15 +37,15 @@ const savePaciente = async (req, res) => {
   const error = await paciente.save().catch((error) => error.message);
   if (typeof error == "string") {
     let key = validateKeyDuplicate(error);
-    console.log(error);
-    console.log(key);
     if (key != null) {
       if (key[1] == "email") {
+        console.log(`Ya existe un usuario con el email ${email}, debe usar un email no registrado`);
         return res.status(400).json({
           msg: `Ya existe un usuario con el email ${email}, debe usar un email no registrado`,
         });
       }
       if (key[1] == "_id") {
+        HTMLFormControlsCollection.log(`Ya existe un usuario con ese número de identificación`);
         return res.status(400).json({
           msg: `Ya existe un usuario con ese número de identificación`,
         });
@@ -107,7 +78,6 @@ const savePaciente = async (req, res) => {
 
 function findPaciente(req, res) {
   var idPaciente = req.params.id;
-  console.log(idPaciente);
   Paciente.findById(idPaciente).exec((err, result) => {
     if (err) {
       res
@@ -124,8 +94,6 @@ function findPaciente(req, res) {
 }
 
 function allPacientes(req, res) {
-  //var idCarrera=req.params.id;//porque idb?
-  //console.log(idCarrera);
   var result = Paciente.find({}).sort("_id");
 
   result.exec(function (err, result) {
@@ -167,8 +135,7 @@ function allPacientes(req, res) {
 const updatePaciente = async (req, res) => {
   const { estado, password, nombres, apellidos, eps, email, personalTel } =
     req.body;
-
-  console.log(req.body, estado);
+  //console.log(req.body, estado);
   try {
     //validar si el id del la entidad relacionada existe.
     /*const proyectoEncontrado = await Proyecto.findById(proyecto);
@@ -222,7 +189,7 @@ const updatePaciente = async (req, res) => {
       newPaciente.personalTel = personalTel;
     }
 
-    console.log(newPaciente);
+    //console.log(newPaciente);
 
     var paciente = await Paciente.findOneAndUpdate(
       { _id: req.params.id },
