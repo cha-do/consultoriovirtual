@@ -1,7 +1,5 @@
-//const mongoose = require("../conexDB/conn");
 const bcryptjs = require("bcryptjs");
 const Paciente = require("../models/paciente");
-//const Profesional = require("../models/profesional");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
@@ -39,13 +37,17 @@ const savePaciente = async (req, res) => {
     let key = validateKeyDuplicate(error);
     if (key != null) {
       if (key[1] == "email") {
-        console.log(`Ya existe un usuario con el email ${email}, debe usar un email no registrado`);
+        console.log(
+          `Ya existe un usuario con el email ${email}, debe usar un email no registrado`
+        );
         return res.status(400).json({
           msg: `Ya existe un usuario con el email ${email}, debe usar un email no registrado`,
         });
       }
       if (key[1] == "_id") {
-        HTMLFormControlsCollection.log(`Ya existe un usuario con ese número de identificación`);
+        HTMLFormControlsCollection.log(
+          `Ya existe un usuario con ese número de identificación`
+        );
         return res.status(400).json({
           msg: `Ya existe un usuario con ese número de identificación`,
         });
@@ -55,7 +57,7 @@ const savePaciente = async (req, res) => {
   }
   //Firmar el JWT
   const payload = {
-    paciente: { _id: paciente._id },
+    usuario: { _id: paciente._id, tipo: "paciente" },
   };
 
   jwt.sign(
@@ -70,7 +72,7 @@ const savePaciente = async (req, res) => {
       //Mensaje de confirmación
       res.json({
         token,
-        payload
+        payload,
       });
     }
   );
@@ -133,8 +135,8 @@ function allPacientes(req, res) {
 }*/
 
 const updatePaciente = async (req, res) => {
-  const { estado, password, nombres, apellidos, eps, email, personalTel } =
-    req.body;
+  const { password, email, personalTel } = req.body;
+  const idPaciente = req.params.id;
   //console.log(req.body, estado);
   try {
     //validar si el id del la entidad relacionada existe.
@@ -143,47 +145,30 @@ const updatePaciente = async (req, res) => {
       return res.status(404).json({ msg: "Proyecto no encontrado" });
     }*/
 
-    //verificar que el usuario actual pueda editar esa entidad
-    /*if (proyectoEncontrado.creador.toString() !== req.usuario.id) {
-      return res.status(400).json({ msg: "No autorizado" });
-    }*/
-
-    const pacienteExiste = await Paciente.findById(req.params.id);
+    const pacienteExiste = await Paciente.findById(idPaciente);
     if (!pacienteExiste) {
       return res.status(404).json({
         msg: "No existe paciente registrado con ese número de identificación.",
       });
     }
-    if (email) {
+    //verificar que el usuario actual pueda editar esa entidad
+    if (req.usuario.tipo != "paciente" || idPaciente !== req.usuario._id) {
+      return res.status(400).json({ msg: "No autorizado" });
+    }
+    if (email && pacienteExiste.email != email) {
       const pacienteCorreo = await Paciente.findOne({ email });
-      //console.log(pacienteCorreo)
       if (pacienteCorreo != null) {
-        if (pacienteCorreo._id.toString() != pacienteExiste._id.toString()) {
-          return res
-            .status(400)
-            .json({ msg: "Existe un usuario con ese email." });
-        }
+        return res
+          .status(400)
+          .json({ msg: "Existe un usuario con ese email." });
       }
     }
-
     const newPaciente = {};
-    if (nombres) {
-      newPaciente.nombres = nombres;
-    }
-    if (estado != null) {
-      newPaciente.estado = estado;
-    }
     if (password) {
       newPaciente.password = await bcryptjs.hash(password, 10);
     }
-    if (apellidos) {
-      newPaciente.apellidos = apellidos;
-    }
     if (email) {
       newPaciente.email = email;
-    }
-    if (eps) {
-      newPaciente.eps = eps;
     }
     if (personalTel) {
       newPaciente.personalTel = personalTel;

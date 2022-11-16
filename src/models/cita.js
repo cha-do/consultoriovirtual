@@ -3,16 +3,26 @@ var Schema = mongoose.Schema;
 
 var CitaSchema = Schema(
   {
+    idProfesional: {
+      type: mongoose.Types.ObjectId,
+      ref: Profesional,
+      required: true,
+    },
     tipo: { type: String, required: true, trim: true },
+    idPaciente: {
+      type: mongoose.Types.ObjectId,
+      ref: Paciente
+    },
+    fechaHora: { type: Date, required: true },
     futura: { type: Boolean, default: true },
     asistencia: { type: Boolean, default: false },
     motivoConsulta: { type: String, trim: true },
     hallazgosPotitivos: { type: String, trim: true },
     impresionesDiag: { type: String, trim: true },
     remision: { type: String, trim: true },
-    codAgenda: { type: mongoose.Types.ObjectId, ref: Agenda, required: true},
-    idProfesional: { type: mongoose.Types.ObjectId, ref: Profesional, required: true},
-    idPaciente: { type: mongoose.Types.ObjectId, ref: Paciente, required: true}
+    disponible: { type: Boolean, default: true },
+    modalidad: { type: String, required: true, trim: true },
+    lugar: { type: String, required: true, trim: true }
   },
   { versionKey: false }
 );

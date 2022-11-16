@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
- function authPaciente (req, res, next) {
+ function auth (req, res, next) {
   //leer el token del header
   console.log("verificando token en el requets")
   const token = req.header("x-auth-token");
@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
 
   try {
     const cifrado = jwt.verify(token,process.env.SECRETA)
-    req.paciente=cifrado.paciente;
+    req.usuario=cifrado.usuario;
     console.log("Token en el requets verificado")
     next();
 
@@ -25,4 +25,4 @@ const jwt = require("jsonwebtoken");
 
 };
 
-module.exports = authPaciente;
+module.exports = auth;

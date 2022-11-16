@@ -2,8 +2,9 @@ const Paciente = require("../models/paciente");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const Profesional = require("../models/profesional");
 
-exports.autenticarPaciente = async (req, res) => {
+const autenticarUsuario = async (req, res) => {
   //Revisar si hay errores
 
   const errores = validationResult(req);
@@ -15,13 +16,18 @@ exports.autenticarPaciente = async (req, res) => {
 
   try {
     //revisar que sea un Paciente registrado
-    let paciente = await Paciente.findOne({ _id });
-    if (!paciente) {
-      return res.status(400).json({ msg: "El paciente no está reguistrado" });
+    let usuario = await Paciente.findOne({ _id });
+    let tipe = "paciente";
+    if (!usuario) {
+      usuario = await Profesional.findOne({ _id });
+      if (!usuario) {
+        return res.status(400).json({ msg: "El paciente no está reguistrado" });
+      }
+      tipe = "profesional";
     }
 
     //revisar la password
-    const passCorrecto = await bcryptjs.compare(password, paciente.password);
+    const passCorrecto = await bcryptjs.compare(password, usuario.password);
     if (!passCorrecto) {
       return res.status(400).json({ msg: "Contraseña incorrecta" });
     }
@@ -29,7 +35,7 @@ exports.autenticarPaciente = async (req, res) => {
     //Si todo es correcto, crear y firmar el token
 
     const payload = {
-      paciente: { _id: paciente._id },
+      usuario: { _id: usuario._id, tipo: tipe },
     };
 
     jwt.sign(
@@ -42,7 +48,7 @@ exports.autenticarPaciente = async (req, res) => {
         if (error) throw error;
 
         //Mensaje de confirmación
-        res.json({ token });
+        return res.status(200).json({ tipo: tipe, token });
       }
     );
   } catch (error) {
@@ -52,11 +58,22 @@ exports.autenticarPaciente = async (req, res) => {
   }
 };
 
-exports.pacienteAutenticado = async (req, res) => {
+const usuarioAutenticado = async (req, res) => {
   try {
-    const paciente = await Paciente.findById(req.paciente._id);
-    res.json({ paciente });
+    if (req.usuario.tipo == "profesional") {
+      const usuario = await Profesional.findOne({ _id });
+      const tipe = "profesional";
+    } else {
+      const usuario = await Paciente.findOne({ _id });
+      const tipe = "paciente";
+    }
+    res.json({ tipo: tipe, usuario });
   } catch (error) {
     res.status(500).json({ msg: "Hubo un error" });
   }
 };
+
+module.exports ={
+  autenticarUsuario,
+  usuarioAutenticado
+}
