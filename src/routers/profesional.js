@@ -7,7 +7,7 @@ const {
   updateProfesional,
   deleteProfesional
 } = require("../controllers/profesional");
-const { check , oneOf } = require("express-validator");
+const { check } = require("express-validator");
 const auth = require("../middleware/auth");
 
 router = Router();
@@ -16,7 +16,7 @@ router.get("/prueba", prueba);
 router.post(
   "/",
   [
-    check("_id", "El número de identificaión es obligatorio").isIdentityCard(),
+    check("_id", "El número de identificaión es obligatorio").isInt(),
     check("nombres", "El nombre es obligatorio").not().isEmpty(),
     check("apellidos", "Los apellidos son obligatorio").not().isEmpty(),
     check("genero", "Debe especificar su genero").not().isEmpty(),

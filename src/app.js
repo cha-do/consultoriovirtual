@@ -5,7 +5,7 @@ const conn = require("./conexDB/conn");
 //importación de rutas
 const auth = require("./routers/auth");
 const pacienteRoutes = require("./routers/paciente");
-const profecionalRoutes = require("./routers/profesional");
+const profesionalRoutes = require("./routers/profesional");
 const citaRoutes = require("./routers/cita");
 const app = express();
 

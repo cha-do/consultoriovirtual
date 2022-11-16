@@ -21,7 +21,7 @@ const autenticarUsuario = async (req, res) => {
     if (!usuario) {
       usuario = await Profesional.findOne({ _id });
       if (!usuario) {
-        return res.status(400).json({ msg: "El paciente no está reguistrado" });
+        return res.status(400).json({ msg: "El usuario no está reguistrado" });
       }
       tipe = "profesional";
     }
@@ -60,20 +60,23 @@ const autenticarUsuario = async (req, res) => {
 
 const usuarioAutenticado = async (req, res) => {
   try {
+    let usuario;
+    let tipe;
     if (req.usuario.tipo == "profesional") {
-      const usuario = await Profesional.findOne({ _id });
-      const tipe = "profesional";
+      usuario = await Profesional.findOne({ _id: req.usuario._id });
+      tipe = "profesional";
     } else {
-      const usuario = await Paciente.findOne({ _id });
-      const tipe = "paciente";
+      usuario = await Paciente.findOne({ __id: req.usuario._id });
+      tipe = "paciente";
     }
-    res.json({ tipo: tipe, usuario });
+    console.log(usuario)
+    return res.status(200).json({ tipo: tipe, usuario });
   } catch (error) {
-    res.status(500).json({ msg: "Hubo un error" });
+    return res.status(500).json({ msg: "Hubo un error" });
   }
 };
 
-module.exports ={
+module.exports = {
   autenticarUsuario,
-  usuarioAutenticado
-}
+  usuarioAutenticado,
+};

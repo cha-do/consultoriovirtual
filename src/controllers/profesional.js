@@ -87,7 +87,7 @@ function findProfesional(req, res) {
         .send({ message: "Error al momento de ejecutar la solicitud" }); // error 500 error de sevidor
     } else {
       if (!result) {
-        res.status(404).send({ message: "No hay profesionales reguistrados." }); // error 404 es un error de que no se encuentra
+        res.status(404).send({ message: `No hay profesionales reguistrados con número de identificación ${idProfesional}.` }); // error 404 es un error de que no se encuentra
       } else {
         res.status(200).send({ result });
       }
@@ -96,8 +96,8 @@ function findProfesional(req, res) {
 }
 
 function allProfesionales(req, res) {
-  const { tipo } = req.query;
-  var result = Profesional.find({ tipo: tipo }).sort("_id");
+  const { especialidad } = req.query;
+  var result = Profesional.find({ especialidad: especialidad }).sort("_id");
   result.exec(function (err, result) {
     if (err) {
       res
@@ -123,7 +123,7 @@ const updateProfesional = async (req, res) => {
     //verificar que el usuario actual pueda editar esa entidad
     if (!profesionalExiste) {
       return res.status(404).json({
-        msg: "No existe profesional registrado con ese número de identificación.",
+        msg: `No hay profesionales reguistrados con número de identificación ${idProfesional}.`,
       });
     }
 
@@ -171,7 +171,7 @@ function deleteProfesional(req, res) {
   Profesional.findByIdAndRemove(idProfesional, function (err, profesional) {
     if (err) {
       return res.json(500, {
-        message: "No hemos encontrado el profesional.",
+        message: `No hay profesionales reguistrados con número de identificación ${idProfesional}.`,
       });
     }
     return res.json(profesional);

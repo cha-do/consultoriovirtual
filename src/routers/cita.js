@@ -11,7 +11,7 @@ const {
   cancelarCita,
   eliminarCita
 } = require("../controllers/cita");
-const { check , oneOf } = require("express-validator");
+const { check } = require("express-validator");
 
 router = Router();
 
@@ -28,8 +28,8 @@ router.post(
 );
 
 router.get("/", auth, obtenerCitas);
-router.get("/:id", auth, obtenerCitasPacienteId);
-router.get("/buscar", auth, obtenerCitasDisponibles);
+router.get("/obtener/:id", auth, obtenerCitasPacienteId);
+router.get("/buscar/", auth, obtenerCitasDisponibles);
 router.put("/:id", auth, actualizarCita);
 router.put("/agendar/:id", auth, agendarCita);
 router.put("/cancelar/:id", auth, cancelarCita);

@@ -87,7 +87,7 @@ function findPaciente(req, res) {
         .send({ message: "Error al momento de ejecutar la solicitud" }); // error 500 error de sevidor
     } else {
       if (!result) {
-        res.status(404).send({ message: "No hay pacientes reguistrados." }); // error 404 es un error de que no se encuentra
+        res.status(404).send({ message: `No hay pacientes reguistrados con número de identificación ${idPaciente}.` }); // error 404 es un error de que no se encuentra
       } else {
         res.status(200).send({ result });
       }
@@ -152,7 +152,8 @@ const updatePaciente = async (req, res) => {
       });
     }
     //verificar que el usuario actual pueda editar esa entidad
-    if (req.usuario.tipo != "paciente" || idPaciente !== req.usuario._id) {
+
+    if (req.usuario.tipo != "paciente" || idPaciente != req.usuario._id) {
       return res.status(400).json({ msg: "No autorizado" });
     }
     if (email && pacienteExiste.email != email) {
@@ -194,72 +195,11 @@ function deletePaciente(req, res) {
   Paciente.findByIdAndRemove(idPaciente, function (err, Paciente) {
     if (err) {
       return res.json(500, {
-        message: "No hemos encontrado el paciente.",
+        message: `No hay pacientes reguistrados con número de identificación ${idPaciente}.`,
       });
     }
     return res.json(Paciente);
   });
-}
-
-function findCitas(req, res) {
-  var idPaciente = req.params.id;
-  var idCita = req.params.idCita;
-  //console.log(idCita);
-
-  var Citares = Paciente.findOne({
-    _id: idPaciente,
-    Citas: { _id: idCita },
-  }).exec((err, result) => {
-    if (err) {
-      console.log(err);
-      res
-        .status(500)
-        .send({ message: "Error al momento de ejecutar la solicitud" }); // error 500 error de sevidor
-    } else {
-      if (!result) {
-        res
-          .status(404)
-          .send({ message: "No se encuentran pacientes con ese id cita." }); // error 404 es un error de que no se encuentra
-      } else {
-        //var i = result.Citas;
-        res.status(200).send({ result });
-
-        console.log(i);
-        //Citares.remove();
-      }
-    }
-  });
-  //var i=Citares.Citas;
-  //console.log(i);
-} // return {i};
-
-function deleteCita(req, res, i) {
-  var idPaciente = req.params.id;
-  var idCita = req.params.idCita;
-  console.log(idCita);
-
-  var Citares = Paciente.findById(idPaciente).exec((err, result) => {
-    if (err) {
-      console.log(err);
-      res
-        .status(500)
-        .send({ message: "Error al momento de ejecutar la solicitud" }); // error 500 error de sevidor
-    } else {
-      if (!result) {
-        res
-          .status(404)
-          .send({ message: "No se encuentran pacientes con ese id." }); // error 404 es un error de que no se encuentra
-      } else {
-        var { i } = result.Citas;
-        res.status(200).send({ i });
-
-        console.log(i);
-        //Citares.remove();
-      }
-    }
-  });
-  //var i=Citares.Citas;
-  //console.log(i);
 }
 
 module.exports = {

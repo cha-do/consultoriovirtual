@@ -8,15 +8,15 @@ const jwt = require("jsonwebtoken");
   //revisar si no hay token
 
   if (!token) {
-    return res.status(400).json({ msg: "No hay token, Permiso no válido" });
+    return res.status(400).json({ msg: "No hay token, permiso no válido" });
   }
 
   //validar token
 
   try {
-    const cifrado = jwt.verify(token,process.env.SECRETA)
+    const cifrado = jwt.verify(token,process.env.SECRETA);
     req.usuario=cifrado.usuario;
-    console.log("Token en el requets verificado")
+    console.log("Token en el requets verificado", req.usuario);
     next();
 
   } catch (error) {

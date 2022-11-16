@@ -1,10 +1,9 @@
-//const mongoose = require("../conexDB/conn");
 const bcryptjs = require("bcryptjs");
 const Cita = require("../models/cita");
-const Agenda = require("../models/agenda");
-//const Profesional = require("../models/profesional");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const Profesional = require("../models/profesional");
+const Paciente = require("../models/paciente");
 
 function prueba(req, res) {
   res.status(200).send({
@@ -18,8 +17,7 @@ const saveCita = async (req, res) => {
   if (!errores.isEmpty()) {
     return res.status(400).json({ errores: errores.array() });
   }
-
-  if (rec.usuario.tipo == "paciente") {
+  if (req.usuario.tipo == "paciente") {
     return res.status(400).json({ msg: "No autorizado" });
   }
 
@@ -28,13 +26,15 @@ const saveCita = async (req, res) => {
     if (idPaciente) {
       let paciente = await Paciente.findById(idPaciente);
       if (!paciente) {
-        return res.status(404).json({ msg: "Paciente no encontrado" });
+        return res.status(404).json({ msg: "Paciente no encontrado." });
       }
     }
     //crear una nueva cita
-    const cita = new Cita(req.body);
+    let cita = new Cita(req.body);
     cita.idProfesional = req.usuario._id;
-    cita.tipo = req.profesional.especialidad;
+    const profesional = await Profesional.findOne({ _id: req.usuario._id });
+    cita.tipo = profesional.especialidad;
+    console.log(profesional);
     if (idPaciente) {
       cita.idPaciente = idPaciente;
       cita.disponible = false;
@@ -70,11 +70,17 @@ const obtenerCitas = async (req, res) => {
 
 const obtenerCitasPacienteId = async (req, res) => {
   try {
-    idPaciente = req.params.id;
-    const citas = await Cita.find({ idPaciente: idPaciente }).sort({
-      fechaHora: -1,
-    });
-    res.json({ citas });
+    const idPaciente = req.params.id;
+    let citas;
+    if (req.usuario.tipo == "profesional" || req.usuario._id == idPaciente) {
+      citas = await Cita.find({ idPaciente: idPaciente }).sort({
+        fechaHora: -1,
+      });
+      return res.status(200).json({ citas });
+    } else {
+      //tipo: paciente
+      return res.status(400).json({ msg: "No autorizado" });
+    }
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);
@@ -85,13 +91,19 @@ const obtenerCitasPacienteId = async (req, res) => {
 const obtenerCitasDisponibles = async (req, res) => {
   try {
     const { idProfesional, tipo } = req.query;
-    const citas = await Cita.find({
-      idProfesional: idProfesional,
-      tipo: tipo,
-    }).sort({
+    let keys = {};
+    if (idProfesional) {
+      keys.idProfesional = idProfesional;
+    }
+    if (tipo) {
+      keys.tipo = tipo;
+    }
+    keys.disponible = true;
+    keys.futura = true;
+    const citas = await Cita.find(keys).sort({
       fechaHora: -1,
     });
-    res.json({ citas });
+    return res.status(200).json({ keys, citas });
   } catch (error) {
     console.log("Hubo un error");
     console.log(error);
@@ -114,8 +126,8 @@ const actualizarCita = async (req, res) => {
     }
 
     if (
-      rec.usuario.tipo != "profesional" ||
-      cita.idProfesional.toString() !== req.usuario._id
+      req.usuario.tipo != "profesional" ||
+      cita.idProfesional != req.usuario._id
     ) {
       return res.status(400).json({ msg: "No autorizado" });
     }
@@ -127,8 +139,9 @@ const actualizarCita = async (req, res) => {
       impresionesDiag,
       remision,
     } = req.body;
-    const actualCita = {};
-    if ((asistencia = !null)) {
+
+    let actualCita = {};
+    if (asistencia != null) {
       actualCita.asistencia = asistencia;
     }
     if (motivoConsulta) {
@@ -143,7 +156,7 @@ const actualizarCita = async (req, res) => {
     if (remision) {
       actualCita.remision = remision;
     }
-    actualCita.futural = false;
+    actualCita.futura = false;
 
     cita = await Cita.findByIdAndUpdate(
       { _id: idCita },
@@ -167,7 +180,7 @@ const agendarCita = async (req, res) => {
   }
 
   try {
-    if (rec.usuario.tipo != "paciente") {
+    if (req.usuario.tipo != "paciente") {
       return res.status(400).json({ msg: "No autorizado" });
     }
     const idCita = req.params.id;
@@ -214,11 +227,12 @@ const cancelarCita = async (req, res) => {
     if (!cita) {
       return res.status(404).json({ msg: "Cita no encontrada" });
     }
-    if (cita.idPaciente.toString() !== req.usuario._id || !cita.futura) {
+    if (cita.idPaciente != req.usuario._id || !cita.futura) {
       return res.status(400).json({ msg: "No autorizado" });
     }
+    let actualCita = {};
 
-    actualCita.motivoConsulta = "";
+    actualCita.motivoConsulta = null;
     actualCita.disponible = true;
     actualCita.idPaciente = null;
     cita = await Cita.findByIdAndUpdate(
@@ -243,11 +257,11 @@ const eliminarCita = async (req, res) => {
       return res.status(404).json({ msg: "Cita no encontrada" });
     }
 
-    if (cita.idProfesional.toString() !== req.usuario._id || !cita.futura) {
+    if (cita.idProfesional != req.usuario._id || !cita.futura) {
       return res.status(400).json({ msg: "No autorizado" });
     }
 
-    await Proyecto.remove({ _id: idCita });
+    await Cita.remove({ _id: idCita });
     return res.status(200).json({ msg: "Cita eliminada" });
   } catch (error) {
     console.log("Hubo un error");
@@ -265,5 +279,5 @@ module.exports = {
   actualizarCita,
   agendarCita,
   cancelarCita,
-  eliminarCita
+  eliminarCita,
 };

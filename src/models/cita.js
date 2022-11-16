@@ -4,14 +4,14 @@ var Schema = mongoose.Schema;
 var CitaSchema = Schema(
   {
     idProfesional: {
-      type: mongoose.Types.ObjectId,
-      ref: Profesional,
+      type: Number,
+      ref: "Profesional",
       required: true,
     },
-    tipo: { type: String, required: true, trim: true },
+    tipo: { type: String, trim: true },
     idPaciente: {
-      type: mongoose.Types.ObjectId,
-      ref: Paciente
+      type: Number,
+      ref: "Paciente"
     },
     fechaHora: { type: Date, required: true },
     futura: { type: Boolean, default: true },
