@@ -1,12 +1,12 @@
 const { Router } = require("express");
 const {
   prueba,
-  savePaciente,
-  findPaciente,
-  allPacientes,
-  updatePaciente,
-  deletePaciente,
-} = require("../controllers/paciente");
+  saveProfesional,
+  findProfesional,
+  allProfesionales,
+  updateProfesional,
+  deleteProfesional
+} = require("../controllers/profesional");
 const { check , oneOf } = require("express-validator");
 const auth = require("../middleware/auth");
 
@@ -20,19 +20,19 @@ router.post(
     check("nombres", "El nombre es obligatorio").not().isEmpty(),
     check("apellidos", "Los apellidos son obligatorio").not().isEmpty(),
     check("genero", "Debe especificar su genero").not().isEmpty(),
-    check("eps", "Debe especificar la eps a la que está afiliado").not().isEmpty(),
     check("fechaNacimiento", "Fecha inválida").isDate(),
+    check("email", "Agrega un email válido").isEmail(),
+    check("especialidad", "Debe especificar su especialidad").not().isEmpty(),
     check("personalTel", "Número de contacto inválido").isMobilePhone(),
-    oneOf([check('email').isEmpty(), check('email').isEmail()], "Agrega un email válido"),
     check("password", "El password debe ser mínimo de 6 caracteres").isLength({
       min: 6,
     }),
   ],
-  savePaciente
+  saveProfesional
 );
-router.get("/:id", findPaciente);
-router.get("/", allPacientes);
-router.put("/:id", auth, updatePaciente);
-router.delete("/:id", deletePaciente);
+router.get("/:id", findProfesional);
+router.get("/", allProfesionales);
+router.put("/:id", auth, updateProfesional);
+router.delete("/:id", deleteProfesional);
 
 module.exports = router;

@@ -14,7 +14,7 @@ var ProfesionalSchema = Schema(
     especialidad: { type: String, required: true, trim: true },
     email: { type: String, trim: true, unique: true, required: true },
     //residenciaDir: String,
-    personalTel: { type: Number, required: true, unique: true, required: true },
+    personalTel: { type: Number, required: true, unique: true, required: true }
     },
   { versionKey: false }
 );

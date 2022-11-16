@@ -56,6 +56,7 @@ const obtenerCitas = async (req, res) => {
       });
       return res.status(200).json({ citas });
     }
+    //Es profesional
     const citas = await Cita.find({ idProfesional: req.usuario._id }).sort({
       fechaHora: -1,
     });

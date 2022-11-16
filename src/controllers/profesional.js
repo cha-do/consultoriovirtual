@@ -116,8 +116,7 @@ function allProfesionales(req, res) {
 }
 
 const updateProfesional = async (req, res) => {
-  const { estado, password, nombres, apellidos, eps, email, personalTel } =
-    req.body;
+  const { password, email, personalTel } = req.body;
   const idProfesional = req.params.id;
   try {
     const profesionalExiste = await Profesional.findById(idProfesional);
@@ -128,10 +127,7 @@ const updateProfesional = async (req, res) => {
       });
     }
 
-    if (
-      req.usuario.tipo != "profesional" ||
-      idProfesional != req.usuario._id
-    ) {
+    if (idProfesional != req.usuario._id) {
       return res.status(400).json({ msg: "No autorizado" });
     }
 
