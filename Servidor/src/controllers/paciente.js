@@ -71,7 +71,7 @@ const savePaciente = async (req, res) => {
       return res.status(200).json({
         token,
         payload,
-        msg: "Paciente creado con éxito",
+        msg: "Paciente registrado con éxito"
       });
     }
   );

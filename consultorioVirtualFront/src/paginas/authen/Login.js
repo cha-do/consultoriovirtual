@@ -65,7 +65,7 @@ const Login = () => {
         //Se guarda en el localstorage (gardar info en el navegador)
         localStorage.setItem("token", jwt);
         //redireccionamos a Home
-        navigate("/paciente/home");
+        navigate(`/${response.tipo}/home`);
       }
       /*setUsuario({
         _id: "",
@@ -147,8 +147,17 @@ const Login = () => {
                 <button type="submit" className="btn btn-block btn-primary">
                   Ingresar
                 </button>
-                <Link to={"/user/crear"} className="btn btn-block btn-danger">
-                  Crear Usuario
+                <Link
+                  to={"/paciente/crear"}
+                  className="btn btn-block btn-danger"
+                >
+                  Registrar Paciente
+                </Link>
+                <Link
+                  to={"/profesional/crear"}
+                  className="btn btn-block btn-danger"
+                >
+                  Registrar profesional
                 </Link>
               </div>
             </form>

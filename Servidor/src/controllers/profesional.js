@@ -73,6 +73,7 @@ const saveProfesional = async (req, res) => {
       res.json({
         token,
         payload,
+        msg: "Profesional registrado con éxito"
       });
     }
   );

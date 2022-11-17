@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import swal from "sweetalert"; //dependencia para generar alertas estéticas
 import APIIncoke from "../../utils/APIIncoke";
 
-const CreaUser = () => {
+const CrearProfesional = () => {
   const [usuario, setUsuario] = useState({
     _id: "",
     nombres: "",
@@ -12,10 +12,11 @@ const CreaUser = () => {
     fechaNacimiento: "",
     edad: "",
     genero: "",
-    eps: "",
+    especialidad: "",
     personalTel: "",
     password: "",
     passwordConfirm: "",
+    email: "",
     //response: "",
   });
 
@@ -27,8 +28,9 @@ const CreaUser = () => {
     passwordConfirm,
     fechaNacimiento,
     genero,
-    eps,
+    especialidad,
     personalTel,
+    email,
   } = usuario;
 
   const onChange = (e) => {
@@ -44,7 +46,7 @@ const CreaUser = () => {
     document.getElementById("_id").focus();
   }, []);
 
-  const crearUser = async () => {
+  const creaProfesional = async () => {
     let mensaje;
     let alert = {};
     alert.buttons = {};
@@ -84,20 +86,32 @@ const CreaUser = () => {
         fechaNacimiento: usuario.fechaNacimiento,
         edad: 30,
         genero: usuario.genero,
-        eps: usuario.eps,
+        especialidad: usuario.especialidad,
         personalTel: usuario.personalTel,
-        //email: usuario.email,
+        email: usuario.email,
         password: usuario.password,
       };
-      const response = await APIIncoke.invokePOST(`/paciente/`, data);
+      const response = await APIIncoke.invokePOST(`/profesional/`, data);
       mensaje = response.msg;
-      console.log(response.status);
-      if (mensaje === "Ya existe un usuario con ese número de identificación") {
+      const { errores } = response;
+      console.log(response)
+      if (errores) {
         alert.title = "Error";
         alert.icon = "error";
+        mensaje = errores[0].msg;
       } else {
-        alert.title = "Registrado";
-        alert.icon = "success";
+        if (
+          mensaje ===
+            `Ya existe un usuario con el email ${email}, debe usar un email no registrado` ||
+          mensaje ===
+            `Ya existe un profesional con ese número de identificación`
+        ) {
+          alert.title = "Error";
+          alert.icon = "error";
+        } else {
+          alert.title = "Registrado";
+          alert.icon = "success";
+        }
       }
       /*setUsuario({
         _id: "",
@@ -106,10 +120,11 @@ const CreaUser = () => {
         fechaNacimiento: "",
         edad: "",
         genero: "",
-        eps: "",
+        especialidad: "",
         personalTel: "",
         password: "",
         passwordConfirm: "",
+        email: "",
       });*/
     }
     alert.text = mensaje;
@@ -129,7 +144,7 @@ const CreaUser = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    crearUser();
+    creaProfesional();
   };
 
   return (
@@ -245,10 +260,10 @@ const CreaUser = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="EPS"
-                  id="eps"
-                  name="eps"
-                  value={eps}
+                  placeholder="Especialidad"
+                  id="especialidad"
+                  name="especialidad"
+                  value={especialidad}
                   onChange={onChange}
                   required
                 />
@@ -274,6 +289,26 @@ const CreaUser = () => {
                   <div className="input-group-append">
                     <div className="input-group-text">
                       <span className="fas fa-phone-volume" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="input-group mb-3">
+                <div className="input-group mb-3">
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                    id="email"
+                    name="email"
+                    value={email}
+                    onChange={onChange}
+                    required
+                  />
+                  <div className="input-group-append">
+                    <div className="input-group-text">
+                      <span className="fas fa-envelope" />
                     </div>
                   </div>
                 </div>
@@ -356,4 +391,4 @@ const CreaUser = () => {
   );
 };
 
-export default CreaUser;
+export default CrearProfesional;

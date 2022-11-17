@@ -1,21 +1,21 @@
 import React from "react";
-import ContentHeader from "../componentes/ContentHeader";
-import Footer from "../componentes/Footer";
-import Navbar from "../componentes/NavBar";
-import Sidebar from "../componentes/Sidebar";
+import ContentHeader from "../../componentes/ContentHeader";
+import Footer from "../../componentes/Footer";
+import Navbar from "../../componentes/NavBar";
+import Sidebar from "../../componentes/Sidebar";
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const HomeProfesional = () => {
   return (
     <div className="wrapper">
       <Navbar></Navbar>
-      <Sidebar></Sidebar>
+      <Sidebar tipoUsuario={"profesional"}></Sidebar>
       <div className="content-wrapper">
         <ContentHeader
-          titulo={"Dashboard"}
+          titulo={"Consultorio"}
           breadCrumb1={"Inicio"}
-          breadCrumb2={"Dashboard"}
-          ruta1={"/paciente/home"}
+          breadCrumb2={"Consultorio"}
+          ruta1={"/profesional/home"}
         />
         <section className="content">
           <div calssName="container-fluid">
@@ -29,7 +29,7 @@ const Home = () => {
                   <div className="icon">
                     <i className="fa fa-edit" />
                   </div>
-                  <Link to={"/paciente/citas"} className="small-box-footer">
+                  <Link to={"/profesional/citas"} className="small-box-footer">
                     Ver citas agendadas{" "}
                     <i className="fas fa-arrow-circle-right" />
                   </Link>
@@ -44,4 +44,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeProfesional;

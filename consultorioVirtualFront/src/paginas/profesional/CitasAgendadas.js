@@ -4,11 +4,11 @@ import ContentHeader from "../../componentes/ContentHeader";
 import Footer from "../../componentes/Footer";
 import Navbar from "../../componentes/NavBar";
 import Sidebar from "../../componentes/Sidebar";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import APIInvoke from "../../utils/APIIncoke";
 import swal from "sweetalert";
 
-const CitasPaciente = () => {
+const CitasProfesional = () => {
   const [citas, setCitas] = useState([]);
 
   const cargarCitas = async () => {
@@ -21,12 +21,12 @@ const CitasPaciente = () => {
     cargarCitas();
   }, []);
 
-  const cancelarCita = async (e, idCita) => {
-    e.preventDefault();//evitar el comportamiento por defecto al oprimir un botón
-    const response = await APIInvoke.invokePUT(`/cita/cancelar/${idCita}`);
+  const eliminarCita = async (e, idCita) => {
+    e.preventDefault(); //evitar el comportamiento por defecto al oprimir un botón
+    const response = await APIInvoke.invokeDELETE(`/cita/${idCita}`);
     swal({
-      title: "Cíta cancelada",
-      text: "Se canceló la cita indicada",
+      title: "Cíta eliminada",
+      text: "Se eliminó la cita indicada",
       icon: "warning",
       buttons: {
         confirm: {
@@ -68,12 +68,12 @@ const CitasPaciente = () => {
                     <i className="fas fa-minus" />
                   </button>
                   <button
-                    onClick={(e) => cancelarCita(e, item._id)}
+                    onClick={(e) => eliminarCita(e, item._id)}
                     type="button"
                     className="btn btn-sm btn-primary"
-                    title="Cancelar cita"
+                    title="Eliminar cita"
                   >
-                    Cancelar cita
+                    Eliminar cita
                   </button>
                 </div>
               </div>
@@ -96,8 +96,8 @@ const CitasPaciente = () => {
                         <td>{item.tipo}</td>
                       </tr>
                       <tr>
-                        <td>Médico</td>
-                        <td>{item.idProfesional}</td>
+                        <td>Paciente</td>
+                        <td>{item.idPaciente}</td>
                       </tr>
                       <tr>
                         <td>Modalidad</td>
@@ -108,8 +108,8 @@ const CitasPaciente = () => {
                         <td>{item.lugar}</td>
                       </tr>
                       <tr>
-                        <td>Motivo Consulta</td>
-                        <td>{item.motivoConsulta}</td>
+                        <td>Agendada</td>
+                        <td>{!item.disponible ? "Sí" : "No"}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -124,4 +124,4 @@ const CitasPaciente = () => {
   );
 };
 
-export default CitasPaciente;
+export default CitasProfesional;
