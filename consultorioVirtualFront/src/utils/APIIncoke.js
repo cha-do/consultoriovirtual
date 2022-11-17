@@ -1,5 +1,7 @@
-import config from '../config'
-
+// import config from '../config'
+const backendUrl = process.env.REACT_APP_API_URL 
+console.log("backend url")
+console.log(backendUrl)
 class APIInvoke {
     async invokeGET(resource, queryParams) {
 
@@ -21,7 +23,7 @@ class APIInvoke {
                 'x-auth-token': bearer
             }
         }
-        const url = `${config.api.baseURL}${resource}${queryString}`
+        const url = `${backendUrl}${resource}${queryString}`
         let response = (await (await fetch(url, data)).json())
         return response
     }
@@ -44,7 +46,7 @@ class APIInvoke {
                 'x-auth-token': bearer
             }
         }
-        const url = `${config.api.baseURL}${resource}`
+        const url = `${backendUrl}${resource}`
         let response = (await (await fetch(url, data)).json())
         return response
     }
@@ -67,7 +69,7 @@ class APIInvoke {
                 'x-auth-token': bearer
             }
         }
-        const url = `${config.api.baseURL}${resource}`
+        const url = `${backendUrl}${resource}`
         let response = (await (await fetch(url, data)).json())
         return response
     }
@@ -89,7 +91,7 @@ class APIInvoke {
                 'x-auth-token': bearer
             }
         }
-        const url = `${config.api.baseURL}${resource}`
+        const url = `${backendUrl}${resource}`
         let response = (await (await fetch(url, data)).json())
         return response
     }
