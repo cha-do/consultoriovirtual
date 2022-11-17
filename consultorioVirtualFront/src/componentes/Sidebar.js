@@ -3,8 +3,17 @@ import Menu from "./Menu";
 import Logo from "./img/Logo.png";
 import Icono from "./img/user_icon.png";
 import { Link } from "react-router-dom";
+//import APIInvoke from "../utils/APIIncoke";
 
 const Sidebar = ({ tipoUsuario }) => {
+  
+  /*const nombreCompleto = async () => {
+    const { usuario } = await APIInvoke.invokeGET(`/auth`);
+    console.log(usuario);
+    const nombreCompleto = usuario.nombres + " " + usuario.apellidos;
+    return nombreCompleto;
+  };*/
+
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       <Link to={"../../index3.html"} className="brand-link">
@@ -27,7 +36,7 @@ const Sidebar = ({ tipoUsuario }) => {
           </div>
           <div className="info">
             <Link to={"#"} className="d-block">
-              Nombre_Usuario
+              nombre_Completo
             </Link>
           </div>
         </div>

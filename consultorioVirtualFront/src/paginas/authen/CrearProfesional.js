@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 //import {insertarPaciente} from '../../services/pacientes';
 import swal from "sweetalert"; //dependencia para generar alertas estéticas
-import APIIncoke from "../../utils/APIIncoke";
+import APIInvoke from "../../utils/APIIncoke";
 
 const CrearProfesional = () => {
   const [usuario, setUsuario] = useState({
@@ -91,7 +91,7 @@ const CrearProfesional = () => {
         email: usuario.email,
         password: usuario.password,
       };
-      const response = await APIIncoke.invokePOST(`/profesional/`, data);
+      const response = await APIInvoke.invokePOST(`/profesional/`, data);
       mensaje = response.msg;
       const { errores } = response;
       console.log(response)

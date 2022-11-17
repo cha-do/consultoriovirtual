@@ -45,13 +45,13 @@ const CitasProfesional = () => {
   return (
     <div className="wrapper">
       <Navbar></Navbar>
-      <Sidebar></Sidebar>
+      <Sidebar tipoUsuario={"profesional"}></Sidebar>
       <div className="content-wrapper">
         <ContentHeader
           titulo={"Citas agendadas"}
           breadCrumb1={"Inicio"}
-          breadCrumb2={"Dashboard"}
-          ruta1={"/home"}
+          breadCrumb2={"Consultorio"}
+          ruta1={"profesional/home"}
         />
         <section className="content">
           {citas.map((item) => (

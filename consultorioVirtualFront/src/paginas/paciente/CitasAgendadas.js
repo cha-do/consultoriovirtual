@@ -22,7 +22,7 @@ const CitasPaciente = () => {
   }, []);
 
   const cancelarCita = async (e, idCita) => {
-    e.preventDefault();//evitar el comportamiento por defecto al oprimir un botón
+    e.preventDefault(); //evitar el comportamiento por defecto al oprimir un botón
     const response = await APIInvoke.invokePUT(`/cita/cancelar/${idCita}`);
     swal({
       title: "Cíta cancelada",
@@ -45,13 +45,13 @@ const CitasPaciente = () => {
   return (
     <div className="wrapper">
       <Navbar></Navbar>
-      <Sidebar></Sidebar>
+      <Sidebar tipoUsuario={"paciente"}></Sidebar>
       <div className="content-wrapper">
         <ContentHeader
           titulo={"Citas agendadas"}
           breadCrumb1={"Inicio"}
-          breadCrumb2={"Dashboard"}
-          ruta1={"/home"}
+          breadCrumb2={"Consultorio"}
+          ruta1={"paciente/home"}
         />
         <section className="content">
           {citas.map((item) => (

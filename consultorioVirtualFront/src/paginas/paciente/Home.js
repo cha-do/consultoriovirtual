@@ -12,9 +12,9 @@ const HomePaciente = () => {
       <Sidebar tipoUsuario={"paciente"}></Sidebar>
       <div className="content-wrapper">
         <ContentHeader
-          titulo={"Dashboard"}
+          titulo={"Consultorio"}
           breadCrumb1={"Inicio"}
-          breadCrumb2={"Dashboard"}
+          breadCrumb2={"Consultorio"}
           ruta1={"/paciente/home"}
         />
         <section className="content">

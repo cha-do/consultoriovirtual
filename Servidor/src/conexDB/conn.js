@@ -1,7 +1,23 @@
 const mongoose = require('mongoose');
 require("dotenv").config({ path: "variables.env" });
 
-mongoose
+
+const conectarDB = async () => {
+    try {
+      await mongoose.connect(process.env.DB_MONGO, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      console.log("DB Conectada");
+    } catch (error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
+  
+  module.exports = conectarDB;
+
+/*mongoose
     .connect("mongodb://0.0.0.0:27017/consultoriovirtual2",
     (err,res)=>{
         if(err){
@@ -13,4 +29,4 @@ mongoose
         //db.close();
     });
     
-module.exports = mongoose;
+module.exports = mongoose;*/
