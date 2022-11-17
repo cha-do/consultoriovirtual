@@ -46,7 +46,7 @@ const Login = () => {
         _id: usuario._id,
         password: usuario.password,
       };
-      const response = await APIIncoke.invokePOST(`/auth/`, data);
+      const response = await APIIncoke.invokePOST(`auth/`, data);
       mensaje = response.msg;
       if (
         mensaje ===
@@ -176,6 +176,8 @@ const Login = () => {
         </div>
       </div>
       {/* /.login-box */}
+      
+      <h2>asdasdasd</h2>
     </div>
   );
 };
