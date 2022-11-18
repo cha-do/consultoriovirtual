@@ -1,0 +1,14 @@
+Despliegue backend con la tecnologia Heroku:
+URL https://consultoriovirtual-back.herokuapp.com/paciente
+
+Despliegue frontend con la tecnologia netlify.
+URL https://6376f921305a2c5fd4b53b0a--monumental-cassata-f4797d.netlify.app
+
+CREDENCIALES DE PRUEBA
+Paciente:
+Numero de identificación: 1
+Password: contrasena
+Profesional:
+Numero de identificación: 100
+Password: contrasena
+O registre nuevos usuarios y obtenga sus propias credenciales.
