@@ -177,7 +177,6 @@ const Login = () => {
       </div>
       {/* /.login-box */}
       
-      <h2>asdasdasd</h2>
     </div>
   );
 };
