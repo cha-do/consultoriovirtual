@@ -23,7 +23,7 @@ const CitasPaciente = () => {
 
   const cancelarCita = async (e, idCita) => {
     e.preventDefault(); //evitar el comportamiento por defecto al oprimir un botón
-    const response = await APIInvoke.invokePUT(`/cita/cancelar/${idCita}`);
+    const response = await APIInvoke.invokePUT(`cita/cancelar/${idCita}`);
     swal({
       title: "Cíta cancelada",
       text: "Se canceló la cita indicada",
