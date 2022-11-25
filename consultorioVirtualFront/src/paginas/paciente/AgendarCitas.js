@@ -12,7 +12,7 @@ const CitasDisponibles = () => {
   const [citas, setCitas] = useState([]);
 
   const cargarCitas = async () => {
-    const response = await APIInvoke.invokeGET(`/cita/buscar`);
+    const response = await APIInvoke.invokeGET(`cita/buscar`);
     console.log(response);
     setCitas(response.citas);
   };
@@ -23,7 +23,7 @@ const CitasDisponibles = () => {
 
   const agendarCita = async (e, idCita) => {
     e.preventDefault(); //evitar el comportamiento por defecto al oprimir un botón
-    const response = await APIInvoke.invokePUT(`/cita/agendar/${idCita}`);
+    const response = await APIInvoke.invokePUT(`cita/agendar/${idCita}`);
     swal({
       title: "Cíta agendada",
       text: "Se agendó la cita indicada",
