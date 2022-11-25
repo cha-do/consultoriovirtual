@@ -89,7 +89,7 @@ const CrearPaciente = () => {
         //email: usuario.email,
         password: usuario.password,
       };
-      const response = await APIIncoke.invokePOST(`/paciente/`, data);
+      const response = await APIIncoke.invokePOST(`paciente/`, data);
       mensaje = response.msg;
       console.log(response.status);
       if (mensaje === "Ya existe un usuario con ese número de identificación") {
