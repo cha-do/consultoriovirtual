@@ -12,7 +12,7 @@ const CitasProfesional = () => {
   const [citas, setCitas] = useState([]);
 
   const cargarCitas = async () => {
-    const response = await APIInvoke.invokeGET(`/cita`);
+    const response = await APIInvoke.invokeGET(`cita`);
     console.log(response);
     setCitas(response.citas);
   };
@@ -23,7 +23,7 @@ const CitasProfesional = () => {
 
   const eliminarCita = async (e, idCita) => {
     e.preventDefault(); //evitar el comportamiento por defecto al oprimir un botón
-    const response = await APIInvoke.invokeDELETE(`/cita/${idCita}`);
+    const response = await APIInvoke.invokeDELETE(`cita/${idCita}`);
     swal({
       title: "Cíta eliminada",
       text: "Se eliminó la cita indicada",
