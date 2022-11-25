@@ -12,7 +12,7 @@ const CitasPaciente = () => {
   const [citas, setCitas] = useState([]);
 
   const cargarCitas = async () => {
-    const response = await APIInvoke.invokeGET(`/cita`);
+    const response = await APIInvoke.invokeGET(`cita`);
     console.log(response);
     setCitas(response.citas);
   };
