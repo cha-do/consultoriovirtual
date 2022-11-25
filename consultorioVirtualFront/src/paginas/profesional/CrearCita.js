@@ -48,7 +48,7 @@ const CitasProfesional = () => {
       modalidad: newCita.modalidad,
       lugar: newCita.lugar,
     };
-    const response = await APIInvoke.invokePOST(`/cita/`, data);
+    const response = await APIInvoke.invokePOST(`cita/`, data);
     mensaje = response.msg;
     const { errores } = response;
     console.log(response);
