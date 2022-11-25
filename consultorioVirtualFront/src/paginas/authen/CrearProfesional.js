@@ -91,7 +91,7 @@ const CrearProfesional = () => {
         email: usuario.email,
         password: usuario.password,
       };
-      const response = await APIInvoke.invokePOST(`/profesional/`, data);
+      const response = await APIInvoke.invokePOST(`profesional/`, data);
       mensaje = response.msg;
       const { errores } = response;
       console.log(response)
